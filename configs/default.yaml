@@ -1,0 +1,127 @@
+base:
+  dataset: 'kaggle_512' 
+  data_index: null 
+  device: cuda 
+  random_seed: 0 
+  
+save_paths:
+
+data_paths:
+
+dset:
+  train_csv: 'kaggle_gradable_train_new_qual_eval.csv'
+  val_csv: 'kaggle_gradable_val_new_qual_eval.csv'
+  test_csv: 'kaggle_gradable_test_new_qual_eval.csv'
+  meta_csv: ['trainLabels.csv', 'test.csv']
+
+data:
+  num_classes: 5 # number of classes, default 100 [2, 5]
+  binary: False # [True, False] True => n_classe = 2, False => n_classe = 5
+  onset: level # onset1 or onset2
+  threshold: 2 # 1 for onset1 and 2 for unset2. to derive the binary metrics: used in the metrics file
+  input_size: 512
+  mean: [0.41326871514320374, 0.2723627984523773, 0.18590997159481049] 
+  std: [0.29345420002937317, 0.20033970475196838, 0.15474912524223328] 
+  sampling_strategy: instance_balanced # instance_balanced / class_balanced / progressively_balanced. ref: https://arxiv.org/abs/1910.09217
+  sampling_weights_decay_rate: 0.9 # if sampling_strategy is progressively_balanced, sampling weight will change from class_balanced to instance_balanced
+  augmentation: 'baseline' #['baseline', 'other']
+  data_augmentation: 
+    - random_crop
+    - horizontal_flip
+    - vertical_flip
+    - color_distortion
+    - rotation
+    - translation
+
+train:
+  network: bagnet33 # [bagnet33, resnet50 (=> v1)] available networks are list in networks.yaml 
+  version: v2  # v1 = bagnet without reg, v2 = with reg
+  sparsity: False  # [True, False]
+  batch_reg_record: True   # just to monitor the regularization after every epoch
+  pretrained: true # load weights from pre-trained model training on ImageNet
+  pretrained_midl: multi_class_sparse_bagnet_best_validation_weights_acc.pt #null; multi_class_sparse_bagnet_best_validation_weights_acc.pt; mullti_class_dense_bagnet_best_validation_weights_acc.pt
+  checkpoint: null # load weights from other pretrained model
+  epochs: 1000
+  batch_size: 8
+  num_workers: 24 # 0, 2, 4 good = 2 number of cpus used to load data at each step
+  criterion: cross_entropy # [cross_entropy, mean_square_error ] available criterions are list in 'criterion_args' below
+  loss_weight: null # null / balance / dynamic / list with shape num_classes. Weights for loss function. Don't use it with weighted sampling!
+  loss_weight_decay_rate: 0 # if loss_weights is dynamic, loss weight will decay from balance to equivalent weights
+  warmup_epochs: 0 # set to 0 to disable warmup
+  kappa_prior: false # save model with higher kappa or higher accuracy in validation set
+  save_interval: 5 # the epoch interval of saving model
+  eval_interval: 1 # the epoch interval of evaluating model on val dataset
+  sample_view: false # save and visualize a batch of images on Tensorboard
+  sample_view_interval: 100 # the steps interval of saving samples on Tensorboard. Note that frequently saving images will slow down the training speed.
+  pin_memory: true # enables fast data transfer to CUDA-enabled GPUs
+  lambda_l1: 0 #0.000004 # [0.00001, 0.00002, 0.000009] Onset2
+  k_min: 1
+  #sa_layer_score: True # True ~ use the local patch score for computing the attention
+  
+solver:
+  optimizer: SGD # SGD / ADAM
+  learning_rate: 0.001 # initial learning rate
+  lr_scheduler: clipped_cosine # [cosine, clipped_cosine] available schedulers are list in 'scheduler_args' below. please remember to update scheduler_args when number of epoch changes.
+  momentum: 0.9 # only for SGD. set to 0 to disable momentum
+  nesterov: true # only for SGD.
+  weight_decay: 0.0005 # set to 0 to disable weight decay
+
+criterion_args:
+  cross_entropy: {}
+  mean_square_error: {}
+  mean_absolute_error: {}
+  smooth_L1: {}
+  kappa_loss:
+    num_classes: 2 # [2, 5]
+  focal_loss:
+    alpha: 5
+    reduction: mean
+
+# please refer to documents of torch.optim
+scheduler_args:
+  exponential:
+    gamma: 0.6 # multiplicative factor of learning rate decay
+  multiple_steps:
+    milestones: [15, 25, 45]
+    gamma: 0.1 # multiplicative factor of learning rate decay
+  cosine:
+    T_max: 50 # maximum number of iterations
+    eta_min: 0 # minimum learning rate
+  reduce_on_plateau:
+    mode: min
+    factor: 0.1 # new learning rate = factor * learning rate
+    patience: 5 # number of epochs with no improvement after which learning rate will be reduced.
+    threshold: 0.0001 
+    eps: 0.00001 
+  clipped_cosine:
+    T_max: 50
+    min_lr: 0.0001 
+
+data_augmentation_args:
+  horizontal_flip:
+    prob: 0.5
+  vertical_flip:
+    prob: 0.5
+  color_distortion:
+    prob: 0.5
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.1
+  random_crop: 
+    prob: 0.5
+    scale: [0.87, 1.15] 
+    ratio: [0.7, 1.3] 
+  rotation:
+    prob: 0.5
+    degrees: [-180, 180]
+  translation:
+    prob: 0.5
+    range: [0.2, 0.2]
+  grayscale: 
+    prob: 0.5
+  gaussian_blur: 
+    prob: 0.2
+    kernel_size: 7
+    sigma: 0.5
+  value_fill: 0 # NOT a data augmentation operation. pixel fill value for the area outside the image

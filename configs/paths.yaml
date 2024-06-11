@@ -1,0 +1,10 @@
+# contains the paths to the dataset
+
+kaggle_dset:
+  root: "/gpfs01/berens/data/data/DR/Kaggle_DR_resized"
+  img_dir: "kaggle_data_512"
+  train_csv: 'kaggle_gradable_train_new_qual_eval.csv'
+  val_csv: 'kaggle_gradable_val_new_qual_eval.csv'
+  test_csv: 'kaggle_gradable_test_new_qual_eval.csv'
+  mean: [0.41326871514320374, 0.2723627984523773, 0.18590997159481049] 
+  std: [0.29345420002937317, 0.20033970475196838, 0.15474912524223328] 
