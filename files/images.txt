@@ -1,0 +1,16 @@
+## fig2
+- '11167_right.png'
+- '8099_right.png', 
+- '33432_right.png'
+
+## fig3
+- '286_right.png'
+- '18238_left.png'
+- '19024_left.png'
+- '26841_right.png'
+
+## fig A7
+- '37089_right.png' 
+- '286_right.png' 
+- '461_left.png'
+- '5162_left.png'
