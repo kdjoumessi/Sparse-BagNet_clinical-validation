@@ -1,6 +1,5 @@
 # Sparse-BagNet validation: An Inherently Interpretable AI model improves Screening Speed and Accuracy for Early Diabetic Retinopathy
-This repository contains the official implementation of the [Sparse-BagNet](https://openreview.net/forum?id=us8BFTsWOq) for early Diabetic Retinopathy detection from the paper [An Inherently Interpretable AI model improves Screening Speed and Accuracy
-for Early Diabetic Retinopathy].
+This repository contains the official implementation of the paper [An Inherently Interpretable AI model improves Screening Speed and Accuracy for Early Diabetic Retinopathy](https://www.medrxiv.org/content/10.1101/2024.06.27.24309574v1).
 
 ## Model's architecture
 ![Model's architecture](./files/model_architecture.png)
