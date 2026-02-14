@@ -94,12 +94,17 @@ The final models with the best validation weights used for all the experiments a
 
 ## Citation
 ```
-  @inproceedings{donteu2023sparse,
-  title={An Inherently Interpretable AI model improves Screening Speed and Accuracy for Early Diabetic Retinopathy},
-  author={Kerol Djoumessi, Ziwei Huang, Annekatrin Rickmann, Natalia Simon, Laura Kühlewein, Lisa M. Koch, Philipp Berens},
-  booktitle={xx},
-  year={2024}
+@article{djoumessi2025inherently,
+  title={An inherently interpretable AI model improves screening speed and accuracy for early diabetic retinopathy},
+  author={Djoumessi, Kerol and Huang, Ziwei and K{\"u}hlewein, Laura and Rickmann, Annekatrin and Simon, Natalia and Koch, Lisa M and Berens, Philipp},
+  journal={PLOS Digital Health},
+  volume={4},
+  number={5},
+  pages={e0000831},
+  year={2025},
+  publisher={Public Library of Science San Francisco, CA USA}
 }
+
 ```
 
 This work includes code adaptations from [Sparse BagNet](https://github.com/kdjoumessi/interpretable-sparse-activation) [(Djoumessi et al., 2023)](https://openreview.net/forum?id=us8BFTsWOq):
